@@ -14,6 +14,9 @@ from game import Directions
 from keyboardAgents import KeyboardAgent
 import inference
 import busters
+from distanceCalculator import Distancer
+from game import Actions
+from game import Directions
 
 class NullGraphics:
     "Placeholder for graphics"
@@ -56,6 +59,7 @@ class BustersAgent:
     "An agent that tracks and displays its beliefs about ghost positions."
 
     def __init__( self, index = 0, inference = "ExactInference", ghostAgents = None, observeEnable = True, elapseTimeEnable = True):
+
         inferenceType = util.lookup(inference, globals())
         self.inferenceModules = [inferenceType(a) for a in ghostAgents]
         self.observeEnable = observeEnable
@@ -65,6 +69,8 @@ class BustersAgent:
         "Initializes beliefs and inference modules"
         import __main__
         self.display = __main__._display
+        self.distancer = Distancer(gameState.data.layout, False)
+
         for inference in self.inferenceModules: inference.initialize(gameState)
         self.ghostBeliefs = [inf.getBeliefDistribution() for inf in self.inferenceModules]
         self.firstMove = True
@@ -88,8 +94,34 @@ class BustersAgent:
         return self.chooseAction(gameState)
 
     def chooseAction(self, gameState):
-        print self.ghostBeliefs.__str__()
-        return Directions.STOP
+        #print self.ghostBeliefs.__str__()
+        #return Directions.STOP
+        pacmanPosition = gameState.getPacmanPosition()
+        legal = [a for a in gameState.getLegalPacmanActions()]
+        livingGhosts = gameState.getLivingGhosts()
+        l = [beliefs for i,beliefs
+             in enumerate(self.ghostBeliefs)
+             if livingGhosts[i+1]]
+        "*** YOUR CODE HERE ***"
+        n = 99999
+        array = util.Counter()
+        for q in l:
+            x = max(q.values())
+            m = n
+            w = "ahem THIS ahemING oh"
+            for e in q:
+                if q[e] == x:
+                    w = e
+            n = min(n, self.distancer.getDistance(w, pacmanPosition))
+            if n != m:
+                array[n] = w
+
+        for action in legal:
+            successorPosition = Actions.getSuccessor(pacmanPosition, action)
+            if self.distancer.getDistance(successorPosition, array[min(array.keys())]) < self.distancer.getDistance(pacmanPosition, array[min(array.keys())]):
+                return action
+
+        util.raiseNotDefined()
 
 class BustersKeyboardAgent(BustersAgent, KeyboardAgent):
     "An agent controlled by the keyboard that displays beliefs about ghost positions."
@@ -104,9 +136,6 @@ class BustersKeyboardAgent(BustersAgent, KeyboardAgent):
     def chooseAction(self, gameState):
         return KeyboardAgent.getAction(self, gameState)
 
-from distanceCalculator import Distancer
-from game import Actions
-from game import Directions
 
 class GreedyBustersAgent(BustersAgent):
     "An agent that charges the closest ghost."
@@ -164,14 +193,11 @@ class GreedyBustersAgent(BustersAgent):
             n = min(n, self.distancer.getDistance(w, pacmanPosition))
             if n != m:
                 array[n] = w
-        #print n
-        #print array
-        #print array[min(array.keys())][0]
+
         for action in legal:
             successorPosition = Actions.getSuccessor(pacmanPosition, action)
             if self.distancer.getDistance(successorPosition, array[min(array.keys())]) < self.distancer.getDistance(pacmanPosition, array[min(array.keys())]):
                 return action
 
-        print "oh! oh!! SHIIIIIIIIIIIIIIIIIIIITTTTTTTTT!!!!!!"
         util.raiseNotDefined()
         

@@ -77,8 +77,9 @@ class QLearningAgent(ReinforcementAgent):
         if len(actions) == 0:
             return None
         for action in self.getLegalActions(state):
-            garbage[self.qs[(state, action)]] = action
-        return garbage[max(garbage.keys())]
+            garbage[action] = self.getQValue(state, action)
+        return argmax(garbage)
+
 
     def getAction(self, state):
         """
@@ -97,8 +98,9 @@ class QLearningAgent(ReinforcementAgent):
         if len(legalActions) == 0:
             return action
         "*** YOUR CODE HERE ***"
-        if random.random() < self.epsilon:
-            return random.choice(legalActions)
+        if util.flipCoin(self.epsilon):
+            action = random.choice(legalActions)
+            return action
         action = self.computeActionFromQValues(state)
         return action
 
@@ -164,7 +166,18 @@ class PacmanQAgent(QLearningAgent):
         self.doAction(state,action)
         return action
 
-
+def argmax(dicct):
+    if len(dicct) == 0:
+        return None
+    max = -9999999
+    lst = []
+    for key in dicct.keys():
+        if dicct[key] > max:
+            max = dicct[key]
+    for key in dicct.keys():
+        if dicct[key] == max:
+            lst.append(key)
+    return random.choice(lst)
 class ApproximateQAgent(PacmanQAgent):
     """
        ApproximateQLearningAgent
@@ -190,6 +203,7 @@ class ApproximateQAgent(PacmanQAgent):
         features = self.featExtractor.getFeatures(state, action)
         q = 0
         for feature in features.keys():
+            
             q += features[feature] * self.weights[feature]
         return q
     def update(self, state, action, nextState, reward):

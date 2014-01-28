@@ -24,7 +24,6 @@ def question3a():
     answerDiscount = 1
     answerNoise = 0.0
     answerLivingReward = -5
-    print "IN THREE A I USED " + answerDiscount.__str__() + " AND " + answerNoise.__str__() + " AND " + answerLivingReward.__str__()
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
@@ -32,7 +31,6 @@ def question3b():
     answerDiscount = .6
     answerNoise = 0.4
     answerLivingReward = -1
-    print "IN THREE b I USED " + answerDiscount.__str__() + " AND " + answerNoise.__str__() + " AND " + answerLivingReward.__str__()
 
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
@@ -41,7 +39,6 @@ def question3c():
     answerDiscount = 1.0
     answerNoise = 0.0
     answerLivingReward = -.1
-    print "IN THREE c I USED " + answerDiscount.__str__() + " AND " + answerNoise.__str__() + " AND " + answerLivingReward.__str__()
 
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
@@ -50,7 +47,6 @@ def question3d():
     answerDiscount = 1.0
     answerNoise = .49
     answerLivingReward = -.5
-    print "IN THREE d I USED " + answerDiscount.__str__() + " AND " + answerNoise.__str__() + " AND " + answerLivingReward.__str__()
 
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
@@ -59,7 +55,6 @@ def question3e():
     answerDiscount = 0.0
     answerNoise = 0.0
     answerLivingReward = 0.0
-    print "IN THREE e I USED " + answerDiscount.__str__() + " AND " + answerNoise.__str__() + " AND " + answerLivingReward.__str__()
 
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'

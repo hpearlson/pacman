@@ -115,6 +115,7 @@ class ReinforcementAgent(ValueEstimationAgent):
           state. This is what you should use to
           obtain legal actions for a state
         """
+        qbart = self.actionFn(state)
         return self.actionFn(state)
 
     def observeTransition(self, state,action,nextState,deltaReward):
