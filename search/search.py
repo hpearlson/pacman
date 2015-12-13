@@ -79,30 +79,30 @@ def depthFirstSearch(problem):
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
     """
-    fringe = util.Stack()
-    visited = sets.Set()
-    solution = {}
-    start = problem.getStartState()
-    if problem.isGoalState(start):
+       f= util.Stack()
+    visited=[]
+    actionSet={}
+    startState=problem.getStartState()
+    if problem.isGoalState(startState):
         return []
-    srs = problem.getSuccessors(start)
-    visited.add(start)
-    for x in srs:
-        fringe.push(x[0])
-        solution[x[0]] = [x[1]]
-    while not fringe.isEmpty():
-        node = fringe.pop()
-        if node not in visited:
-            if problem.isGoalState(node):
-                return solution[node]
-            visited.add(node)
-            successors = problem.getSuccessors(node)
-            for x in successors:
-                q = list(solution[node])
-                q.append(x[1])
-                solution[x[0]] = q
-                fringe.push(x[0])
-    return None
+    visited=[startState]
+    startSuccessors=problem.getSuccessors(startState)
+    for node in startSuccessors: #node is a triple (state,action,stepCost)
+        f.push(node[0])
+        actionSet[node[0]]=node[1] #the action of the state is stored
+    while not f.isEmpty():
+        currentState=f.pop()
+        if currentState not in visited:
+            if problem.isGoalState(currentState):
+                return actionSet[currentState]
+            visited.append(currentState)
+            currentSuccessors=problem.getSuccessors(currentState)
+            for nextNode in currentSuccessors:
+                solutionUpTo=list(actionSet[currentState])
+                solutionUpTo.append(nextNode[1]) #adds next action to next state actionSet
+                actionSet[nextNode[0]]=solutionUpTo
+                f.push(nextNode[0])
+    return []
 
 def breadthFirstSearch(problem):
     """
